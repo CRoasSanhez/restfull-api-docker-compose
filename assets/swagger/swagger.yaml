@@ -1,0 +1,197 @@
+---
+swagger: "2.0"
+info:
+  description: Se requiere construir una API Rest para afiliar clientes, permitirles hacer un pago de su membresía y permitirles ver sus pagos efectuados
+  version: 1.0.0
+  title: Yofio Technical Test
+  contact:
+    email: cesar.rosas.sanchz@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /zizar/yofiotest/1.0.0
+tags:
+- name: public
+  description: Public operations
+schemes:
+- https
+paths:
+  /register:
+    post:
+      tags:
+      - public
+      summary: register user to the platform
+      description: |
+        By provide the specific data without repeated Phone number you create an user in the platform
+      operationId: registerUser
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: Register
+        required: false
+        schema:
+          $ref: '#/definitions/Register'
+      responses:
+        "201":
+          description: user created
+        "400":
+          description: invalid input
+        "412":
+          description: Phone number already exists
+  /login:
+    post:
+      tags:
+      - public
+      summary: user login to the platform
+      description: |
+        By provide the specific data the user tries to LogIn in the platform
+      operationId: loginUser
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: Login
+        required: false
+        schema:
+          $ref: '#/definitions/Login'
+      responses:
+        "200":
+          description: success
+        "400":
+          description: Invalid data format
+        "401":
+          description: Incorrect data
+        "403":
+          description: Blocked user
+        "429":
+          description: Maximum number of login attempts
+  /payments:
+    get:
+      tags:
+      - public
+      summary: user login to the platform
+      description: |
+        By provide the specific data the user tries to retreive all the successfull payments
+      operationId: userGetPayments
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: A Payments object
+        "401":
+          description: No previous logIn or invalid token
+        "403":
+          description: Blocked user or user tries to see other clients payments
+    post:
+      tags:
+      - public
+      summary: user membership payment
+      description: |
+        By provide the specific data the user tries to pay his membership
+      operationId: userPostPayments
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: paymentRequest
+        required: false
+        schema:
+          $ref: '#/definitions/PaymentRequest'
+      responses:
+        "200":
+          description: success
+        "400":
+          description: Invalid data format or amount greater than 100000
+        "401":
+          description: No previous logIn or invalid token
+        "403":
+          description: Blocked user
+        "422":
+          description: Unsuccess payment
+        "429":
+          description: Maximum number of payment attempts
+definitions:
+  Register:
+    type: object
+    required:
+    - email
+    - name
+    - password
+    - phone
+    properties:
+      name:
+        type: string
+        example: John Wick
+      phone:
+        type: string
+        format: phone
+        example: +525512345678
+      email:
+        type: string
+        format: email
+        example: john.wick@email.com
+      password:
+        type: string
+        format: '1 upper, 1 lower, 1 number, min len 9 '
+        example: Password1
+  Login:
+    type: object
+    required:
+    - password
+    - phone
+    properties:
+      phone:
+        type: string
+        format: phone
+        example: +525512345678
+      password:
+        type: string
+        format: '1 upper, 1 lower, 1 number, min len 9 '
+        example: Password1
+  PaymentRequest:
+    type: object
+    required:
+    - amount
+    - card_number
+    - cvv
+    - exp_date
+    - owner
+    properties:
+      amount:
+        type: integer
+        format: number
+        example: 100000
+      card_number:
+        type: string
+        example: "1111222233334444"
+      exp_date:
+        type: string
+        example: "82"
+      owner:
+        type: string
+        example: John Wick
+      cvv:
+        type: string
+        example: "343"
+  Payments:
+    type: array
+    items:
+      $ref: '#/definitions/Payment'
+  Payment:
+    type: object
+    properties:
+      membership_id:
+        type: integer
+        format: autoincrement
+      status:
+        type: string
+        example: success
+      amount:
+        type: integer
+        example: 100000
+      inserted_at:
+        type: string
+        format: date-time
