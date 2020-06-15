@@ -1,16 +1,15 @@
 package handlers
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/CRoasSanhez/yofio-test/internal/platform/web"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 	"github.com/sirupsen/logrus"
 )
 
 // API REST interface for api
-func API(db *sql.DB) http.Handler {
+func API(db *gorm.DB) http.Handler {
 	srv, err := web.NewServer(db)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{

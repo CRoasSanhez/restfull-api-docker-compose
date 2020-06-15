@@ -2,13 +2,13 @@ package web
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/CRoasSanhez/yofio-test/internal/responses"
+	"github.com/jinzhu/gorm"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
@@ -17,7 +17,7 @@ import (
 // Server ...
 type Server struct {
 	router   *httprouter.Router
-	DataBase *sql.DB
+	DataBase *gorm.DB
 	Ctx      context.Context
 }
 
@@ -29,7 +29,7 @@ type ServerHandler func(w http.ResponseWriter, r *http.Request, params httproute
 
 // NewServer Return a struct that containts the references to resources
 // used in the lifecycle of the API
-func NewServer(db *sql.DB) (*Server, error) {
+func NewServer(db *gorm.DB) (*Server, error) {
 	srv := Server{
 		router:   httprouter.New(),
 		DataBase: db,

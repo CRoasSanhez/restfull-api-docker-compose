@@ -9,12 +9,13 @@ import (
 
 // Envs it is used to store enviroment vars
 type Envs struct {
-	Env               string `required:"true" split_words:"true"`
-	AppHost           string `required:"true" split_words:"true" default:"0.0.0.0"`
-	AppPort           string `required:"true" split_words:"true"`
-	JwtSecretKey      string `required:"true" split_words:"true" default:"sup3rs3cret"`
-	MysqlDBPassword   string `required:"true" split_words:"true"`
-	MysqlDatabaseName string `required:"true" split_words:"true"`
+	Env              string `required:"true" split_words:"true"`
+	AppHost          string `required:"true" split_words:"true" default:"0.0.0.0"`
+	AppPort          string `required:"true" split_words:"true"`
+	JwtSecretKey     string `required:"true" split_words:"true" default:"sup3rs3cret"`
+	DatabasePassword string `required:"true" split_words:"true"`
+	DatabaseName     string `required:"true" split_words:"true"`
+	DatabaseUser     string `required:"true" split_words:"true"`
 }
 
 // SetUpEnvs ...
