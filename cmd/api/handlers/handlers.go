@@ -108,11 +108,17 @@ func Login(server *web.Server) web.ServerHandler {
 
 		// Validate blocked user
 		if userDB.IsBlocked {
+			logrus.WithFields(logrus.Fields{
+				"User blocked": userDB.ID,
+			}).Info()
 			return web.UserBlocked.WithStatus(http.StatusForbidden) //403
 		}
 
 		// Validate login failures
 		if userDB.LoginFailures >= 5 {
+			logrus.WithFields(logrus.Fields{
+				"Max attemps reached": userDB.ID,
+			}).Info()
 			return web.MaxLoginAttemptsReached.WithStatus(http.StatusTooManyRequests) //429
 		}
 

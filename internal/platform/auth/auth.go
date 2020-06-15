@@ -32,7 +32,7 @@ func SignToken(userID string) (string, error) {
 	claims := make(jwtv4.MapClaims)
 	now := time.Now().Unix()
 
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix() // expiration for 72hrs
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // expiration for 72hrs
 	claims["aud"] = audience
 	claims["uid"] = userID
 	claims["iat"] = now
